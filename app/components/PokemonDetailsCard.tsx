@@ -61,7 +61,7 @@ export default function PokemonDetailsCard({ id }: { id: string }) {
   };
 
   const handleNext = () => {
-    setCurrentId((prev) => prev + 1); // optionally cap at max Pokémon number
+    setCurrentId((prev) => prev + 1); 
   };
 
   return (
@@ -94,7 +94,6 @@ export default function PokemonDetailsCard({ id }: { id: string }) {
           ).join(", ")}
         />
 
-        {/* Stats 3x2 grid */}
         <div className="flex flex-wrap gap-6 mb-3 mt-3">
           {data.stats.map((stat: any) => (
             <div key={stat.stat.name} className="w-1/2">
@@ -108,7 +107,6 @@ export default function PokemonDetailsCard({ id }: { id: string }) {
           <p className="mt-1 text-gray-700">{desc}</p>
         </div>
 
-        {/* Navigation buttons */}
         <div className="flex justify-between mt-6">
           <button
             onClick={handlePrev}
@@ -129,7 +127,12 @@ export default function PokemonDetailsCard({ id }: { id: string }) {
   );
 }
 
-function Info({ label, value }: any) {
+type InfoProps = {
+  label: string;
+  value: string;
+};
+
+function Info({ label, value }: InfoProps) {
   return (
     <div className="flex gap-1">
       <span className="text-my-pink text-xl font-semibold">{label}</span>
@@ -138,7 +141,7 @@ function Info({ label, value }: any) {
   );
 }
 
-function InfoBlock({ label, value }: any) {
+function InfoBlock({ label, value }: InfoProps) {
   return (
     <div className="mt-2">
       <span className="text-my-pink text-xl font-semibold">{label}</span>
