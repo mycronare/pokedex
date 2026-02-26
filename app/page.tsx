@@ -7,14 +7,22 @@ import SlidePanel from "./components/SlidePanel";
 
 export default function Home() {
   const [pokemon, setPokemon] = useState<any[]>([]);
-  const [limit, setLimit] = useState(20);
+  const [offset, setOffset] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const LIMIT = 10;
+
+  const [search, setSearch] = useState("");
+  const [selectedType, setSelectedType] = useState("");
+  cost [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   useEffect(() => {
     async function fetchPokemon() {
+
+      setLoading(true);
       const res = await fetch(
-        `https://pokeapi.co/api/v2/pokemon?limit=${limit}`
+        `https://pokeapi.co/api/v2/pokemon?limit=${LIMIT}&offset=${offset}`
       );
       const data = await res.json();
 
@@ -25,21 +33,16 @@ export default function Home() {
         })
       );
 
-      setPokemon(detailed);
+      setPokemon((prev) => [...prev, ...detailed]);
+      setLoading(false);
     }
 
     fetchPokemon();
-  }, [limit]);
+  }, [offset]);
 
   return (
     <main className="relative min-h-screen overflow-hidden">
-
-      {/* GRID */}
       <div className="px-8 py-10">
-        <h1 className="text-5xl font-bold text-center mb-12">
-          Pokédex
-        </h1>
-
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
           {pokemon.map((p, index) => (
             <div
@@ -53,9 +56,17 @@ export default function Home() {
             </div>
           ))}
         </div>
+
+        <div className="flex justify-center mt-10">
+          <button
+            onClick={() => setOffset((prev) => prev + LIMIT)}
+            className="px-6 py-2 bg-my-pink text-white text-3xl rounded-full hover:opacity-80 transition"
+          >
+            {loading ? "Loading.." : "Load more pokemon"}
+          </button>
+        </div>
       </div>
 
-      {/* SLIDE PANEL */}
       <SlidePanel
         isOpen={isOpen}
         pokemonList={pokemon}
