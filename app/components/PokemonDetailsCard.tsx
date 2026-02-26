@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 export default function PokemonDetailsCard({ id }: { id: string }) {
   const router = useRouter();
   const [currentId, setCurrentId] = useState(Number(id));
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<string>("");
   const [desc, setDesc] = useState("Loading...");
 
   const paddedId = String(currentId).padStart(3, "0");
@@ -80,14 +80,14 @@ export default function PokemonDetailsCard({ id }: { id: string }) {
 
         <InfoBlock
           label="Types"
-          value={data.types.map((t: any) => t.type.name).join(", ")}
+          value={data.types.map((t: string) => t.type.name).join(", ")}
         />
 
         <InfoBlock
           label="Weaknesses"
           value={Array.from(
             new Set(
-              data.types.flatMap((type: any) =>
+              data.types.flatMap((type: string) =>
                 typeWeaknesses[type.type.name.toLowerCase()] || []
               )
             )
@@ -95,7 +95,7 @@ export default function PokemonDetailsCard({ id }: { id: string }) {
         />
 
         <div className="flex flex-wrap gap-6 mb-3 mt-3">
-          {data.stats.map((stat: any) => (
+          {data.stats.map((stat: string) => (
             <div key={stat.stat.name} className="w-1/2">
               <Info label={stat.stat.name.toUpperCase()} value={stat.base_stat} />
             </div>
