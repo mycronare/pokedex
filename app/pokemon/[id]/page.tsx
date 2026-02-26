@@ -1,67 +1,29 @@
-import Image from "next/image";
+import PokemonDetailsCard from "@/app/components/PokemonDetailsCard";
+import Link from "next/link";
+import { use } from "react";
 
-interface PageProps {
-  params: {
-    id: string;
-  };
-}
-
-export default async function PokemonDetail({ params }: PageProps) {
-  const res = await fetch(
-    `https://pokeapi.co/api/v2/pokemon/${params.id}`
-  );
-
-  const pokemon = await res.json();
-
-  const paddedId = String(pokemon.id).padStart(3, "0");
-
-  const imageUrl = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${paddedId}.png`;
+export default function PokemonFullPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
 
   return (
-    <div className="bg-white rounded-3xl shadow-xl p-10">
-      <div className="flex flex-col md:flex-row gap-10 items-center">
-        <Image
-          src={imageUrl}
-          alt={pokemon.name}
-          width={300}
-          height={300}
-          className="object-contain"
-        />
-
-        <div>
-          <h1 className="text-4xl font-bold capitalize">
-            {pokemon.name}
-          </h1>
-
-          <p className="text-gray-500 mt-2 mb-4">
-            #{paddedId}
-          </p>
-
-          <div className="flex gap-2 flex-wrap mb-6">
-            {pokemon.types.map((type: any) => (
-              <span
-                key={type.type.name}
-                className="bg-gray-200 px-4 py-2 rounded-full capitalize"
-              >
-                {type.type.name}
-              </span>
-            ))}
-          </div>
-
-          <div className="space-y-2">
-            <p>
-              <strong>Height:</strong> {pokemon.height}
-            </p>
-            <p>
-              <strong>Weight:</strong> {pokemon.weight}
-            </p>
-            <p>
-              <strong>Base Experience:</strong>{" "}
-              {pokemon.base_experience}
-            </p>
-          </div>
-        </div>
+    <main className="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4">
+      <div className="w-full max-w-3xl mb-6">
+        <Link 
+          href="/" 
+          className="text-gray-500 hover:text-gray-800 flex items-center gap-2"
+        >
+          ← Go back 
+        </Link>
       </div>
-    </div>
+
+      <div className="w-full max-w-3xl">
+        <PokemonDetailsCard id={id} />
+      </div>
+    </main>
   );
 }
+

@@ -16,6 +16,7 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [selectedType, setSelectedType] = useState("");
 
+
   type SortOption =
   | "id-asc"
   | "id-desc"
@@ -23,6 +24,8 @@ export default function Home() {
   | "name-desc";
 
   const [sortOption, setSortOption] = useState<SortOption>("id-asc");
+
+
 
   useEffect(() => {
     async function fetchPokemon() {
@@ -75,7 +78,7 @@ export default function Home() {
     <main className="relative min-h-screen overflow-hidden pl-50 pr-140">
       <div className="absolute top-0 right-0 h-full w-50 bg-my-peach"></div>
       <div className="py-10 max-w-9xl">
-        <div className="flex flex-col md:flex-row gap-4 mb-8 items-start justify-between">
+        <div className={`flex flex-col md:flex-row gap-4 mb-8 items-start justify-between ${isOpen ? "pr-140" : "pr-0"}`}>
 
           <input
             type="text"

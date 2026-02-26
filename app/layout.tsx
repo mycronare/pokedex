@@ -16,14 +16,17 @@ const jersey10 = Jersey_10({
 
 export default function RootLayout({
   children,
+  modal
 }: {
   children: React.ReactNode;
+  modal: React.ReactNode;
 }) {
   return (
     <html lang="en" className={jersey10.variable}>
       <body className="bg-gradient-to-b from-red-100 via-white to-gray-100 min-h-screen">
         <div className="max-w-9xl">
           {children}
+          {modal}
         </div>
       </body>
     </html>
