@@ -148,7 +148,7 @@ export default function Home() {
 
       <SlidePanel
         isOpen={isOpen}
-        pokemonList={pokemon}
+        pokemonList={filteredPokemon}
         currentIndex={currentIndex}
         setCurrentIndex={setCurrentIndex}
       />
