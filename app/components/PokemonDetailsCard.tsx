@@ -73,12 +73,12 @@ export default function PokemonDetailsCard({ id }: { id: string }) {
 
   if (!data) return null;
 
-  const handlePrev = () => {
-    setCurrentId((prev) => (prev > 1 ? prev - 1 : 1));
+  const goNext = () => {
+    setCurrentId((prev) => prev + 1);
   };
 
-  const handleNext = () => {
-    setCurrentId((prev) => prev + 1);
+  const goPrev = () => {
+    setCurrentId((prev) => (prev > 1 ? prev - 1 : 1));
   };
 
   const weaknesses = Array.from(
@@ -131,13 +131,13 @@ export default function PokemonDetailsCard({ id }: { id: string }) {
 
         <div className="flex justify-between mt-6">
           <button
-            onClick={handlePrev}
+            onClick={goPrev}
             className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
           >
             Previous
           </button>
           <button
-            onClick={handleNext}
+            onClick={goNext}
             className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
           >
             Next
