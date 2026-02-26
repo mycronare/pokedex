@@ -3,10 +3,27 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+type Pokemon = {
+  name: string;
+  height: number;
+  weight: number;
+  types: {
+    type: {
+      name: string;
+    };
+  }[];
+  stats: {
+    base_stat: number;
+    stat: {
+      name: string;
+    };
+  }[];
+};
+
 export default function PokemonDetailsCard({ id }: { id: string }) {
   const router = useRouter();
   const [currentId, setCurrentId] = useState(Number(id));
-  const [data, setData] = useState<string>("");
+  const [data, setData] = useState<Pokemon | null>(null);
   const [desc, setDesc] = useState("Loading...");
 
   const paddedId = String(currentId).padStart(3, "0");
@@ -38,7 +55,7 @@ export default function PokemonDetailsCard({ id }: { id: string }) {
       const pokemonRes = await fetch(
         `https://pokeapi.co/api/v2/pokemon/${currentId}`
       );
-      const pokemon = await pokemonRes.json();
+      const pokemon: Pokemon = await pokemonRes.json();
       setData(pokemon);
 
       const speciesRes = await fetch(
@@ -61,8 +78,19 @@ export default function PokemonDetailsCard({ id }: { id: string }) {
   };
 
   const handleNext = () => {
-    setCurrentId((prev) => prev + 1); 
+    setCurrentId((prev) => prev + 1);
   };
+
+  const weaknesses = Array.from(
+    new Set(
+      data.types.flatMap(
+        (type) =>
+          typeWeaknesses[
+            type.type.name.toLowerCase() as keyof typeof typeWeaknesses
+          ] || []
+      )
+    )
+  ).join(", ");
 
   return (
     <div className="bg-white rounded-2xl shadow-xl w-[960px] flex overflow-hidden p-2">
@@ -75,29 +103,23 @@ export default function PokemonDetailsCard({ id }: { id: string }) {
           <Info label="Number" value={paddedId} />
           <Info label="Name" value={data.name} />
           <Info label="Height" value={`${data.height / 10} m`} />
-          <Info label="Weight" value={`${data.weight / 10} g`} />
+          <Info label="Weight" value={`${data.weight / 10} kg`} />
         </div>
 
         <InfoBlock
           label="Types"
-          value={data.types.map((t: string) => t.type.name).join(", ")}
+          value={data.types.map((t) => t.type.name).join(", ")}
         />
 
-        <InfoBlock
-          label="Weaknesses"
-          value={Array.from(
-            new Set(
-              data.types.flatMap((type: string) =>
-                typeWeaknesses[type.type.name.toLowerCase()] || []
-              )
-            )
-          ).join(", ")}
-        />
+        <InfoBlock label="Weaknesses" value={weaknesses} />
 
         <div className="flex flex-wrap gap-6 mb-3 mt-3">
-          {data.stats.map((stat: string) => (
+          {data.stats.map((stat) => (
             <div key={stat.stat.name} className="w-1/2">
-              <Info label={stat.stat.name.toUpperCase()} value={stat.base_stat} />
+              <Info
+                label={stat.stat.name.toUpperCase()}
+                value={stat.base_stat}
+              />
             </div>
           ))}
         </div>
@@ -121,7 +143,6 @@ export default function PokemonDetailsCard({ id }: { id: string }) {
             Next
           </button>
         </div>
-
       </div>
     </div>
   );
@@ -129,7 +150,7 @@ export default function PokemonDetailsCard({ id }: { id: string }) {
 
 type InfoProps = {
   label: string;
-  value: string;
+  value: React.ReactNode;
 };
 
 function Info({ label, value }: InfoProps) {
