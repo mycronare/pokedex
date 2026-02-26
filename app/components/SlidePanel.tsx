@@ -22,9 +22,7 @@ export default function SlidePanel({
     pokemonList[(currentIndex - 1 + pokemonList.length) % pokemonList.length];
   const next =
     pokemonList[(currentIndex + 1) % pokemonList.length];
-
   const paddedId = String(current.id).padStart(3, "0");
-
   const imageUrl = (id: number) =>
     `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${String(
       id
@@ -32,11 +30,20 @@ export default function SlidePanel({
 
   const goNext = () =>
     setCurrentIndex((currentIndex + 1) % pokemonList.length);
-
   const goPrev = () =>
     setCurrentIndex(
       (currentIndex - 1 + pokemonList.length) % pokemonList.length
     );
+
+  const total = pokemonList.length;
+  const windowSize = 10; 
+
+  let start = Math.max(currentIndex - 2, 0);
+  let end = Math.min(start + windowSize, total);
+
+  start = Math.max(end - windowSize, 0);
+
+  const visibleDots = pokemonList.slice(start, end);
 
   return (
     <AnimatePresence>
@@ -48,7 +55,7 @@ export default function SlidePanel({
           transition={{ duration: 0.4 }}
           className="
             fixed top-0 right-0
-            h-full w-[1300px]
+            h-full w-[1100px]
             bg-[#FCE4D8]
             z-40
             p-8
@@ -76,7 +83,6 @@ export default function SlidePanel({
               />
             </div>
 
-            {/* MAIN CARD */}
             <motion.div
               key={current.id}
               initial={{ opacity: 0, scale: 0.9 }}
@@ -121,17 +127,18 @@ export default function SlidePanel({
             <button onClick={goPrev}>‹</button>
             {/* Dots */}
             <div className="flex gap-5 ml-10 mr-10 bg-[#fff2d0] p-4 rounded-3xl">
-              {pokemonList.map((_, index) => (
-                <div
-                  key={index}
-                  className={`
-                    w-2 h-2 rounded-full
-                    ${index === currentIndex
-                      ? "bg-[#fbd87f]"
-                      : "bg-[#fbd87f]/50"}
-                  `}
-                />
-              ))}
+              {visibleDots.map((_, i) => {
+                const index = start + i;
+                return (
+                  <div
+                    key={index}
+                    className={`
+                      w-2 h-2 rounded-full
+                      ${index === currentIndex ? "bg-[#fbd87f]" : "bg-[#fbd87f]/50"}
+                    `}
+                  />
+                );
+              })}
             </div>
             <button onClick={goNext}>›</button>
           </div>

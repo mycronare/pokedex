@@ -18,8 +18,8 @@ export default function PageTab({ isOpen, toggle }: Props) {
         flex items-center justify-center
         shadow-xl
         transition-all duration-400
-        z-50
-        ${isOpen ? "right-[1300px]" : "right-0"}
+        z-50 
+        ${isOpen ? "right-[1100px]" : "right-50"}
       `}
       aria-label="Page navigation tab"
     >

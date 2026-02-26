@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={jersey10.variable}>
       <body className="bg-gradient-to-b from-red-100 via-white to-gray-100 min-h-screen">
-        <div className="max-w-7xl mx-auto px-6 py-10">
+        <div className="max-w-9xl">
           {children}
         </div>
       </body>
